@@ -8,13 +8,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#633CFF",
+        primary: {
+          index: "#633CFF",
+          hover: "#BEADFF",
+        },
         neutral: {
-          "very-soft-blue": "#EFEBFF",
-          black: "#333333",
-          gray: "#737373",
-          "light-gray": "#D9D9D9",
-          "white-smoke": "#FAFAFA",
+          "light-purple": "#EFEBFF",
+          "dark-grey": "#333333",
+          grey: "#737373",
+          borders: "#D9D9D9",
+          "light-grey": "#FAFAFA",
         },
         error: "#FF3939",
       },
