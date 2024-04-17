@@ -10,7 +10,9 @@ import Header from "@/components/header/header";
 import Main from "@/components/main/main";
 
 // font
-const instrumentSans = Instrument_Sans({ subsets: ["latin"] });
+const instrumentSans = Instrument_Sans({
+  subsets: ["latin"],
+});
 
 // metadata
 export const metadata = {
@@ -19,10 +21,11 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  
   return (
     <html lang="en">
       <body
-        className={`p-8 h-screen box-border overflow-hidden bg-neutral-light-grey ${instrumentSans.className}`}
+        className={`p-8 h-screen box-border overflow-hidden overflow-y-scroll bg-neutral-light-grey ${instrumentSans.className}`}
       >
         <Header />
         <Main>{children}</Main>

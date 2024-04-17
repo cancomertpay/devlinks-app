@@ -21,6 +21,13 @@ module.exports = {
         },
         error: "#FF3939",
       },
+      boxShadow: {
+        "3xl": "0px 5px 15px rgba(0, 0, 0, 0.35)",
+        "4xl": "0px 3px 8px rgba(0, 0, 0, 0.24)",
+      },
+      dropShadow: {
+        "3xl": "1px 1px 10px #633CFF",
+      },
     },
   },
   plugins: [],

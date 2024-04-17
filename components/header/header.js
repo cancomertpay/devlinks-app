@@ -10,7 +10,7 @@ function Header() {
     <header>
       {/* brand-logo */}
       <div>
-        <Image src={devlinks_logo_large} alt="devlinks logo" />
+        <Image src={devlinks_logo_large} alt="devlinks logo" priority />
       </div>
       <div>{/* .... */}</div>
     </header>
