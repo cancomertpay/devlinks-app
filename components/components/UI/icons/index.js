@@ -9,6 +9,9 @@ import Hashnode from "./hashnode";
 import Linkedin from "./linkedin";
 import StackOverflow from "./stack-overflow";
 import Youtube from "./youtube";
+import Email from "./email";
+import Twitch from "./twitch";
+import RightArrow from "./right-arrow";
 
 export {
   Github,
@@ -22,4 +25,7 @@ export {
   Linkedin,
   StackOverflow,
   Youtube,
+  Email,
+  Twitch,
+  RightArrow
 };
