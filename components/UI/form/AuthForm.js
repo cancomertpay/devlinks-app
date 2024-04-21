@@ -86,7 +86,7 @@ function AuthForm({ action, state, type = "login" }) {
           ) : (
             <>
               <p className="text-sm text-neutral-grey">
-                Don't have an account?
+                Don&apos;t have an account?
               </p>
               <Link
                 className="text-sm text-primary-index hover:text-primary-hover transition-colors duration-300 ease-in-out"
