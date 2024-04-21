@@ -3,8 +3,8 @@ import TabsTitle from "./tabs-title";
 
 function Tabs({ children }) {
   return (
-    <nav className="w-full p-5">
-      <ul className="flex items-center justify-around">{children}</ul>
+    <nav>
+      <ul className="flex items-center justify-center">{children}</ul>
     </nav>
   );
 }

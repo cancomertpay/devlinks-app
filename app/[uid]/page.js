@@ -1,12 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase-config";
 import Image from "next/image";
 
-export default function Home() {
+function UserPage({ params }) {
   const [user, loading] = useAuthState(auth);
   const router = useRouter();
 
@@ -24,12 +23,19 @@ export default function Home() {
       </div>
     );
   }
-
-  if (user) {
-    router.push("/" + user.uid);
-    return;
-  } else {
+  
+  if (!user) {
     router.push("/login");
     return;
   }
+  
+  const uid = user?.uid;
+  if (uid !== params?.uid) {
+    router.push("/");
+    return;
+  }
+
+  return <div>User links</div>
 }
+
+export default UserPage;

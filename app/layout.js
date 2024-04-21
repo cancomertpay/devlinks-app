@@ -8,6 +8,7 @@ import "./globals.css";
 import Header from "@/components/header/header";
 // main content container component
 import Main from "@/components/main/main";
+import { Toaster } from "react-hot-toast";
 
 // font
 const instrumentSans = Instrument_Sans({
@@ -24,10 +25,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`p-8 h-screen box-border overflow-x-hidden overflow-y-scroll bg-neutral-light-grey ${instrumentSans.className}`}
+        className={`p-4 h-screen box-border overflow-hidden bg-neutral-light-grey ${instrumentSans.className}`}
       >
         <Header />
-        <Main>{children}</Main>
+        <Main>
+          <Toaster position="bottom-center" />
+          {children}
+        </Main>
       </body>
     </html>
   );

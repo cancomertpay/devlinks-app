@@ -8,6 +8,7 @@ function Input({
   placeholder,
   error,
   errorMessage,
+  ...rest
 }) {
   if (!id) {
     throw new Error("Input component must have an id prop");
@@ -34,6 +35,7 @@ function Input({
           name={title === "Link" ? name + "-link" : name}
           id={uniqueId}
           placeholder={placeholder}
+          {...rest}
         />
         <span className="absolute top-1/2 left-3 transform -translate-y-1/2">
           {title === "Link" ? (
