@@ -1,12 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase-config";
 import Image from "next/image";
 
-export default function Home() {
+function UserProfilePage() {
   const [user, loading] = useAuthState(auth);
   const router = useRouter();
 
@@ -25,11 +24,13 @@ export default function Home() {
     );
   }
 
-  if (user) {
-    router.push("/" + user.uid);
-    return;
-  } else {
+  if (!user) {
     router.push("/login");
-    return;
   }
+
+  return <div>
+    profile
+  </div>;
 }
+
+export default UserProfilePage;

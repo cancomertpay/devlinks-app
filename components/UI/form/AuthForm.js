@@ -1,49 +1,71 @@
-import React from "react";
 import Button from "../button/button";
 import Input from "../input/input";
 import Link from "next/link";
 
-function AuthForm({ action, type = "login" }) {
+function AuthForm({ action, state, type = "login" }) {
   if (!action) {
     throw new Error("Action is required for AuthForm component");
   }
+
   const registerForm = type === "register";
+
   return (
     <form action={action} className="flex flex-col gap-5">
-      <Input
-        id="email"
-        name={registerForm ? "email" : "login-email"}
-        title="Email Address"
-        type="email"
-        placeholder="e.g. alex@email.com"
-      />
-      <Input
-        id="password"
-        name={registerForm ? "password" : "login-password"}
-        title={registerForm ? "Create password" : "Password"}
-        type="password"
-        placeholder={
-          registerForm ? "At least .8 characters" : "Enter your password"
-        }
-        innerImg="/images/icon-password.svg"
-      />
-      {registerForm && (
+      <div>
         <Input
-          id="confirm-password"
-          name="confirm-password"
-          title="Confirm password"
+          id="email"
+          name="email"
+          title="Email Address"
+          type="email"
+          placeholder="e.g. alex@email.com"
+          error={state?.errors?.email}
+        />
+        {state?.errors?.email && (
+          <p className="text-error text-sm italic">{state.errors.email}</p>
+        )}
+      </div>
+      <div>
+        <Input
+          id="password"
+          name="password"
+          title={registerForm ? "Create password" : "Password"}
           type="password"
           placeholder={
             registerForm ? "At least .8 characters" : "Enter your password"
           }
-          innerImg="/images/icon-password.svg"
+          error={state?.errors?.password}
         />
-      )}
-      {registerForm && (
-        <p className="text-xs text-neutral-grey">
-          Password must contain at least 8 characters
-        </p>
-      )}
+        {state?.errors?.password && (
+          <div className="text-error">
+            <p className=" text-sm italic">Password must:</p>
+            <ul>
+              {state.errors.password.map((error) => (
+                <li className="text-xs " key={error}>
+                  - {error}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {registerForm && (
+          <Input
+            id="confirm-password"
+            name="confirm-password"
+            title="Confirm password"
+            type="password"
+            placeholder={
+              registerForm ? "At least .8 characters" : "Enter your password"
+            }
+            error={state?.errors?.confirmPassword}
+          />
+        )}
+        {state?.errors?.confirmPassword && (
+          <p className="text-error text-sm italic">
+            {state.errors.confirmPassword}
+          </p>
+        )}
+      </div>
+
       <Button style="primary" disabled={false}>
         {registerForm ? "Create new account" : "Login"}
       </Button>

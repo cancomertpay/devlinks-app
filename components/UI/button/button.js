@@ -1,4 +1,8 @@
-function Button({ children, style, disabled }) {
+"use client";
+import { useFormStatus } from "react-dom";
+function Button({ children, style, disabled, onClick }) {
+  const { pending } = useFormStatus();
+
   let buttonStyle;
   switch (style) {
     case "primary":
@@ -14,8 +18,8 @@ function Button({ children, style, disabled }) {
       break;
   }
   return (
-    <button className={buttonStyle} disabled={disabled}>
-      {children}
+    <button aria-disabled={pending} className={buttonStyle} disabled={disabled} onClick={onClick}>
+      {pending ? "Submitting..." : children}
     </button>
   );
 }

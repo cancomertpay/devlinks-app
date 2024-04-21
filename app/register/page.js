@@ -1,14 +1,17 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from 'next/navigation'
+import { useFormState } from "react-dom";
+import AuthForm from "@/components/UI/form/AuthForm";
+import { signup } from "@/lib/actions/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase-config";
 import Image from "next/image";
 
-export default function Home() {
+function RegisterPage() {
+  const [state, action] = useFormState(signup, undefined);
   const [user, loading] = useAuthState(auth);
-  const router = useRouter();
+  const router = useRouter()
 
   if (loading) {
     return (
@@ -25,11 +28,11 @@ export default function Home() {
     );
   }
 
-  if (user) {
-    router.push("/" + user.uid);
-    return;
-  } else {
-    router.push("/login");
-    return;
+  if(user) {
+    router.push('/')
   }
+
+  return <AuthForm action={action} state={state} type="register" />;
 }
+
+export default RegisterPage;
