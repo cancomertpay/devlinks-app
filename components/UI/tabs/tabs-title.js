@@ -14,8 +14,7 @@ import Link from "../icons/link";
 import ProfileIcon from "../icons/profile";
 
 function TabsTitle({ children }) {
-  const pathname = usePathname();
-  const activePath = pathname.split("/").pop();
+  const activePath = usePathname();
 
   const [onMouseEnter, setOnMouseEnter] = useState({ id: "", status: false });
 
@@ -33,12 +32,12 @@ function TabsTitle({ children }) {
     <div
       onMouseEnter={() => handleMouseEnter(id)}
       onMouseLeave={() => handleMouseLeave(id)}
-      className={`flex items-center justify-center gap-2 py-3 px-6 font-semibold rounded-lg text-neutral-grey hover:text-primary-index  ${
+      className={`flex items-center justify-center gap-2 py-3 px-7 font-semibold rounded-lg text-neutral-grey hover:text-primary-index  ${
         activePath === id ? "text-primary-index bg-neutral-light-purple" : ""
       } `}
     >
       <span>
-        {id !== "profile" ? (
+        {id !== "/profile-details" ? (
           <Link
             color={
               activePath === id ||
@@ -60,7 +59,7 @@ function TabsTitle({ children }) {
           />
         )}
       </span>
-      {children?.length > 0 || children && <span>{children}</span>}
+      {children && <span>{children}</span>}
     </div>
   );
 }

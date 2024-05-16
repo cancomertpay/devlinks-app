@@ -1,13 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import allMenuList from "@/lib/all-menu-list";
 import Image from "next/image";
 
-function Dropdown({ name }) {
-  if(!name) {
+function Dropdown({ name, onChange, onClick, value, error, errorMessage }) {
+  if (!name) {
     throw new Error("Name is required for Dropdown component");
+  } else if (!onChange) {
+    throw new Error("onChange is required for Dropdown component");
   }
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [onMouseEnter, setOnMouseEnter] = useState({ name: "", status: false });
   const [selectedValue, setSelectedValue] = useState({ name: "", icon: "" });
@@ -44,26 +47,38 @@ function Dropdown({ name }) {
       return;
     }
 
-    setSelectedValue((prev) =>
-      prev.name === menuItem.name
-        ? { name: "", icon: "" }
-        : { name: menuItem.name, icon: menuItem.icon }
-    );
+    setSelectedValue({ name: menuItem.name, icon: menuItem.icon });
     setHiddenInputValue(menuItem.name);
   };
 
+  useEffect(() => {
+    if (value) {
+      const menuItem = allMenuList.find((item) => item.name === value);
+      setSelectedValue(menuItem ? menuItem : { name: "", icon: "" });
+      setHiddenInputValue(menuItem ? menuItem.name : "");
+    }
+  }, []);
+
+  useEffect(() => {
+    onChange(hiddenInputValue);
+  }, [hiddenInputValue]);
   return (
     <div className="py-1 relative">
-      <input type="hidden" name={name} value={hiddenInputValue} />
-
+      <input type="hidden" name={"platform-" + name} value={hiddenInputValue} />
+      <label
+        htmlFor={"platform-" + name}
+        className="text-xs text-neutral-dark-grey"
+      >
+        Platform
+      </label>
       <div
-        className={`w-full h-[48px] flex items-center justify-between cursor-pointer bg-transparent transition-all duration-300 ease-in-out rounded-lg py-3 px-3 border border-neutral-borders hover:border-primary-index hover:shadow-3xl ${
+        className={`w-full h-[48px] flex items-center justify-between cursor-pointer bg-white transition-all duration-300 ease-in-out rounded-lg py-3 px-3 border border-neutral-borders hover:border-primary-index hover:shadow-3xl ${
           dropdownOpen ? "!border-primary-index !shadow-3xl" : ""
-        }`}
+        } ${error ? "border-error" : ""}`}
         onClick={toggleDropdown}
       >
-        <div className="flex items-center justify-center gap-2">
-          <span className="">
+        <div className="flex items-center justify-center gap-3">
+          <span>
             {!selectedValue?.icon ? (
               <Image
                 src={`/images/icon-link.svg`}
@@ -75,9 +90,13 @@ function Dropdown({ name }) {
               selectedValue?.icon
             )}
           </span>
-          <span className="text-neutral-dark-grey">
-            {selectedValue?.name && selectedValue?.name}
-          </span>
+          {error ? (
+            <span className="text-error">{errorMessage}</span>
+          ) : (
+            <span className="text-neutral-dark-grey">
+              {selectedValue?.name && selectedValue?.name}
+            </span>
+          )}
         </div>
         <span
           className={`transition-all duration-300 ease-in-out ${
@@ -94,7 +113,7 @@ function Dropdown({ name }) {
       </div>
 
       {dropdownOpen && (
-        <ul className="absolute top-14 right-0 z-50 bg-white shadow-4xl py-3 px-4 w-full max-h-[20rem] rounded-lg border border-neutral-borders overflow-x-hidden overflow-y-scroll">
+        <ul className="absolute top-20 right-0 z-50 bg-white shadow-4xl py-3 px-4 w-full max-h-[15rem] rounded-lg border border-neutral-borders overflow-x-hidden overflow-y-scroll">
           {allMenuList.map((item, index, arr) => (
             <li
               key={index}
@@ -103,6 +122,7 @@ function Dropdown({ name }) {
               onClick={() => {
                 handleselectedValue(item);
                 toggleDropdown();
+                onClick && onClick()
               }}
               className={`flex items-center gap-3 cursor-pointer border-b-2 border-neutral-borders py-3  ${
                 index === 0 ? "pt-0" : ""
@@ -130,7 +150,7 @@ function Dropdown({ name }) {
                 }
             `}
               >
-                {item.name} {selectedValue?.name === item.name && "(selected)"}
+                {item.name}
               </span>
             </li>
           ))}

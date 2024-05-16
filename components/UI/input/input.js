@@ -8,6 +8,8 @@ function Input({
   placeholder,
   error,
   errorMessage,
+  hasIcon = true,
+  profile = false,
   ...rest
 }) {
   if (!id) {
@@ -20,13 +22,20 @@ function Input({
 
   const uniqueId = id + "-" + name;
   return (
-    <div className="py-1">
-      <label htmlFor={uniqueId} className="text-xs text-neutral-dark-grey">
+    <div
+      className={`py-1 ${profile ? "md:flex md:items-center md:justify-between" : ""}`}
+    >
+      <label
+        htmlFor={uniqueId}
+        className={`text-xs text-neutral-dark-grey ${profile ? "md:w-5/12 md:text-base md:text-neutral-grey" : ""}`}
+      >
         {title}
       </label>
-      <div className="relative">
+      <div className={`relative ${
+            profile ? "md:w-7/12" : ""
+          }`}>
         <input
-          className={`w-full pl-10 text-neutral-dark-grey ring-neutral-borders ring-1 cursor-pointer bg-transparent outline-none transition-all duration-300 ease-in-out rounded-lg py-3 ${
+          className={`w-full text-neutral-dark-grey ring-neutral-borders ring-1 cursor-pointer bg-white outline-none transition-all duration-300 ease-in-out rounded-lg py-3 ${hasIcon ? "pl-10" : "px-4"} ${
             error
               ? "!ring-error !text-error hover:shadow-none hover:!ring-error/50 focus:ring-error focus:shadow-none "
               : "text-neutral-dark-grey ring-neutral-borders focus:ring-primary-index hover:ring-primary-index/50 focus:shadow-3xl hover:shadow-3xl"
@@ -37,27 +46,29 @@ function Input({
           placeholder={placeholder}
           {...rest}
         />
-        <span className="absolute top-1/2 left-3 transform -translate-y-1/2">
-          {title === "Link" ? (
-            <Image
-              src={`/images/icon-link.svg`}
-              alt={title}
-              width="16"
-              height="16"
-            />
-          ) : (
-            <Image
-              src={`/images/icon-${
-                id === "confirm-password" ? "password" : id
-              }.svg`}
-              alt={title}
-              width="16"
-              height="16"
-            />
-          )}
-        </span>
+        {hasIcon && (
+          <span className="absolute top-1/2 left-3 transform -translate-y-1/2">
+            {title === "Link" ? (
+              <Image
+                src={`/images/icon-link.svg`}
+                alt={title}
+                width="16"
+                height="16"
+              />
+            ) : (
+              <Image
+                src={`/images/icon-${
+                  id === "confirm-password" ? "password" : id
+                }.svg`}
+                alt={title}
+                width="16"
+                height="16"
+              />
+            )}
+          </span>
+        )}
         {error && (
-          <span className="absolute top-1/2 right-3 transform -translate-y-1/2 text-xs lg:text-base text-error pl-2 lg:px-4 py-2 bg-neutral-light-grey">
+          <span className="absolute top-1/2 right-0 transform -translate-y-1/2 text-xs lg:text-base text-error p-2 lg:px-4 bg-white">
             {errorMessage}
           </span>
         )}
