@@ -26,7 +26,6 @@ module.exports = {
           linkedin: "#2D68FF",
           youtube: "#EE3939",
           facebook: "#2442AC",
-          twitch: "#EE3FC8",
           devto: "#333333",
           codewars: "#8A1A50",
           "free-code-camp": "#302267",
