@@ -22,7 +22,7 @@ function PreviewHeader() {
 
     document.body.removeChild(tempInput);
 
-    toast("The link has been copied to your clipboard!", {
+    toast("Link copied to your clipboard!", {
       icon: <CopiedIcon />,
     });
   };

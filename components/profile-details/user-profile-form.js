@@ -17,10 +17,10 @@ function UserProfileForm() {
             <UserProfileDetailSkeleton />
           ) : (
             <>
-              <div className="px-6 h-[273px]">
+              <div className="px-6 md:h-[273px]">
                 <UploadImage />
               </div>
-              <div className="px-6 h-[255px]">
+              <div className="px-6 md:h-[255px]">
                 <ProfileInputGroup />
               </div>
             </>

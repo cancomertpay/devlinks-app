@@ -29,14 +29,14 @@ function PhoneMockup() {
         />
         <div className="absolute top-16 flex flex-col items-center justify-center w-full ">
           {userProfilePicMockup || userObject.profile_picture ? (
-            <div>
+            <div className="h-[96px] w-[96px]">
               {!userProfilePicMockup ? (
                 <Image
                   src={userObject.profile_picture}
                   alt="User's profile photo"
                   width={96}
                   height={96}
-                  className="rounded-full border-4 border-primary-index duration-200 hover:border-primary-hover"
+                  className="h-[96px] w-[96px] rounded-full border-4 border-primary-index duration-200 hover:border-primary-hover"
                 />
               ) : (
                 <Image
@@ -44,7 +44,7 @@ function PhoneMockup() {
                   alt="User's photo preview"
                   width={96}
                   height={96}
-                  className="rounded-full border-4 border-primary-index duration-200 hover:border-primary-hover"
+                  className="!h-[96px] !w-[96px] rounded-full border-4 border-primary-index duration-200 hover:border-primary-hover"
                 />
               )}
             </div>

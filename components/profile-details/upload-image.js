@@ -19,6 +19,10 @@ export default function UploadImage() {
   const [error, setError] = useState(errorObject?.["profile_picture"]);
   const [isFieldDirty, setIsFieldDirty] = useState(false);
 
+  console.log("imageUrl", imageUrl);
+  console.log("error", error);
+  console.log("isFieldDirty", isFieldDirty);
+
   useEffect(() => {
     handleFieldEdit(isFieldDirty);
   }, [isFieldDirty, imageUrl]);
@@ -80,7 +84,7 @@ export default function UploadImage() {
   };
 
   return (
-    <div className="p-6 flex flex-col md:flex-row md:items-center md:justify-between bg-neutral-light-grey rounded-xl">
+    <div className={`p-6 flex flex-col md:flex-row md:items-center md:justify-between bg-neutral-light-grey rounded-xl ${error?.profile_picture?.status ? "border !border-error" : ""}`}>
       <p className="text-neutral-grey md:text-nowrap">Profile picture</p>
       <div className="md:flex md:items-center md:justify-end md:gap-5">
         <div className="flex my-4">
@@ -125,12 +129,12 @@ export default function UploadImage() {
           </label>
         </div>
         <div className="md:w-[30%]">
-          {!error?.status ? (
+          {!error?.profile_picture?.status ? (
             <p className="text-neutral-grey text-xs ">
               Image must be below 1024x1024px. Use PNG or JPG format.
             </p>
           ) : (
-            <p className="text-error text-xs">{error.message}</p>
+            <p className="text-error text-xs">Error: &nbsp; {error?.profile_picture?.message}</p>
           )}
         </div>
       </div>
