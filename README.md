@@ -18,7 +18,7 @@ Once all changes are made, users can click the "Preview" button at the top right
 ![App Preview](https://res.cloudinary.com/dz209s6jk/image/upload/f_auto,q_auto,w_700/Challenges/thypgk1nmxm4modj1wdl.jpg)
 
 ## 🌍 Live Link
-![live app](https://devlinksapp.vercel.app/)
+Check out the live app [here](https://your_live_app_link.com)
 
 ## 📧 Contact
 Can Cömertpay - @cancomertpay - cancomertpay@gmail.com
