@@ -52,7 +52,7 @@ export default function LinksList({ links }) {
     >
       <SortableContext items={links} strategy={verticalListSortingStrategy}>
         <Droppable
-          className={`min-h-[397px] max-h-[660px] lg:h-[490px] w-full overflow-auto ${
+          className={`min-h-[397px] md:max-h-[660px] lg:h-[490px] w-full md:overflow-auto ${
             links.length > 1 ? "pb-28" : ""
           }`}
         >

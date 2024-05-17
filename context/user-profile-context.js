@@ -35,8 +35,8 @@ export default function UserProfileProvider({ children }) {
   const [hasError, setHasError] = useState(false);
   const [imageProcessLoading, setImageProcessLoading] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [buttonDisabled, setButtonDisabled] = useState(true);
+
 
   const handleUserProfilePicMockup = (imageURL) => {
     setUserProfilePicMockup(imageURL);
@@ -54,7 +54,6 @@ export default function UserProfileProvider({ children }) {
     }
 
     setImageProcessLoading(true);
-
     const storageRef = ref(
       storage,
       `users/${currentUser?.displayName}/profile_picture`
@@ -81,6 +80,7 @@ export default function UserProfileProvider({ children }) {
   const handleError = (error) => {
     setErrorObject(error);
   };
+  console.log(errorObject);
 
   const handleUserInputs = (name, value) => {
     setUserObject((prev) => ({
@@ -104,12 +104,6 @@ export default function UserProfileProvider({ children }) {
       setErrorObject((prev) => ({
         ...prev,
         last_name: { status: true, message: "Can't be empty" },
-      }));
-      return;
-    } else if (userObject["email"]?.trim() === "") {
-      setErrorObject((prev) => ({
-        ...prev,
-        email: { status: true, message: "Can't be empty" },
       }));
       return;
     }

@@ -3,10 +3,10 @@ import Image from "next/image";
 export default function DisplayUserProfile({ profile }) {
   return (
     <div className="flex flex-col gap-4 items-center justify-center">
-      <div className="border-4 rounded-full border-primary-index hover:border-primary-hover hover:scale-105 transition-all duration-300 ease-in-out">
+      <div className="border-4 rounded-full border-primary-index hover:border-primary-hover transition-all duration-300 ease-in-out">
         {profile?.profile_picture ? (
           <Image
-            className="rounded-full object-contain h-[104px] w-[104px]"
+            className="rounded-full !h-[104px] !w-[104px]"
             src={profile?.profile_picture}
             alt="profile picture"
             height={104}
