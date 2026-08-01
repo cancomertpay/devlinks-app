@@ -85,6 +85,7 @@ function Dropdown({ name, onChange, onClick, value, error, errorMessage }) {
                 alt={"Link icon"}
                 width="16"
                 height="16"
+                className="h-4 w-4"
               />
             ) : (
               selectedValue?.icon
@@ -108,6 +109,7 @@ function Dropdown({ name, onChange, onClick, value, error, errorMessage }) {
             alt={"Dropdown icon"}
             width="14"
             height="14"
+            className="h-3.5 w-3.5"
           />
         </span>
       </div>

@@ -73,7 +73,13 @@ export default function Features() {
               className="rounded-xl border border-neutral-borders bg-white p-8 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-primary-index/40 hover:shadow-4xl"
             >
               <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-neutral-light-purple">
-                <Image src={feature.icon} alt="" width={20} height={20} />
+                <Image
+                  src={feature.icon}
+                  alt=""
+                  width={20}
+                  height={20}
+                  className="h-5 w-5"
+                />
               </span>
               <h3 className="mt-6 text-xl font-bold text-neutral-dark-grey">
                 {feature.title}

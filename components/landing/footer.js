@@ -10,6 +10,7 @@ function LandingFooter() {
           alt="devlinks logo"
           width={32}
           height={32}
+          className="h-8 w-8"
         />
         <nav className="flex items-center gap-6 text-sm text-neutral-grey">
           <Link

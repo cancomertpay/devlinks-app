@@ -55,7 +55,7 @@ export default function PhoneShowcase() {
               alt=""
               width={32}
               height={32}
-              className="opacity-40"
+              className="h-8 w-8 opacity-40"
             />
           </div>
           <div className="h-4 w-32 rounded-full bg-neutral-dark-grey" />
