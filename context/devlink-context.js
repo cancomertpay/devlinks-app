@@ -2,6 +2,7 @@
 
 import { getUserDevlinks, submitUserDevLinks } from "@/lib/actions/dashboard";
 import { generateId } from "@/lib/utils/helpers";
+import toast from "react-hot-toast";
 
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -159,7 +160,9 @@ export default function DevlinksProvider({ children }) {
       })
       .catch((error) => {
         setLoading(false);
-        throw new Error(error);
+        // Rethrowing here took down the whole dashboard with an unhandled
+        // runtime error instead of telling the user what went wrong
+        toast.error(error.message ?? "Your links could not be loaded.");
       });
   }, []);
 
