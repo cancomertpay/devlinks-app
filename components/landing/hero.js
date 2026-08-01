@@ -70,7 +70,7 @@ export default function Hero() {
           >
             <Link
               href="/register"
-              className="rounded-md bg-primary-index px-8 py-3 text-center text-sm font-bold text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:bg-primary-hover hover:shadow-4xl"
+              className="rounded-md bg-primary-index px-8 py-3 text-center text-sm font-bold text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:bg-primary-index/90 hover:shadow-4xl"
             >
               Create your page
             </Link>

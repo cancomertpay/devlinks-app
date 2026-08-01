@@ -32,7 +32,7 @@ function LandingHeader() {
         {user ? (
           <Link
             href="/customize-links"
-            className="rounded-md bg-primary-index px-4 py-3 text-sm font-bold text-white transition-all duration-300 ease-in-out hover:bg-primary-hover md:px-6"
+            className="rounded-md bg-primary-index px-4 py-3 text-sm font-bold text-white transition-all duration-300 ease-in-out hover:bg-primary-index/90 md:px-6"
           >
             Go to my links
           </Link>
@@ -46,7 +46,7 @@ function LandingHeader() {
             </Link>
             <Link
               href="/register"
-              className="rounded-md bg-primary-index px-4 py-3 text-sm font-bold text-white transition-all duration-300 ease-in-out hover:bg-primary-hover md:px-6"
+              className="rounded-md bg-primary-index px-4 py-3 text-sm font-bold text-white transition-all duration-300 ease-in-out hover:bg-primary-index/90 md:px-6"
             >
               Get started
             </Link>
