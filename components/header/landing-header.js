@@ -22,31 +22,38 @@ function LandingHeader() {
       initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="box-border flex w-full items-center justify-between px-6 py-6 md:px-12"
+      className="box-border flex w-full items-center justify-between gap-4 px-4 py-5 md:px-12 md:py-6"
     >
       <Link href="/">
-        <Image src={devlinks_logo_large} alt="devlinks logo" priority />
+        <Image
+          src={devlinks_logo_large}
+          alt="devlinks logo"
+          className="h-7 w-auto md:h-9"
+          priority
+        />
       </Link>
 
-      <nav className="flex items-center gap-2 md:gap-3">
+      <nav className="flex items-center gap-1 md:gap-3">
         {user ? (
           <Link
             href="/customize-links"
-            className="rounded-md bg-primary-index px-4 py-3 text-sm font-bold text-white transition-all duration-300 ease-in-out hover:bg-primary-index/90 md:px-6"
+            className="whitespace-nowrap rounded-md bg-primary-index px-4 py-2.5 text-sm font-bold text-white transition-all duration-300 ease-in-out hover:bg-primary-index/90 md:px-6 md:py-3"
           >
             Go to my links
           </Link>
         ) : (
           <>
+            {/* Hidden on the narrowest screens, where the hero's own
+                "I already have one" link covers the same route */}
             <Link
               href="/login"
-              className="rounded-md px-4 py-3 text-sm font-bold text-neutral-grey transition-colors duration-300 ease-in-out hover:text-primary-index"
+              className="hidden rounded-md px-4 py-3 text-sm font-bold text-neutral-grey transition-colors duration-300 ease-in-out hover:text-primary-index sm:block"
             >
               Login
             </Link>
             <Link
               href="/register"
-              className="rounded-md bg-primary-index px-4 py-3 text-sm font-bold text-white transition-all duration-300 ease-in-out hover:bg-primary-index/90 md:px-6"
+              className="whitespace-nowrap rounded-md bg-primary-index px-4 py-2.5 text-sm font-bold text-white transition-all duration-300 ease-in-out hover:bg-primary-index/90 md:px-6 md:py-3"
             >
               Get started
             </Link>
