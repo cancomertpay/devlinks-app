@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import {
   Devto,
   Facebook,
@@ -13,7 +16,9 @@ import {
   RightArrow,
 } from "../UI/icons";
 
-function DevLink({ link, mockup = false }) {
+// `variants` lets a list animate its links in one by one; without a parent
+// running variants the item simply renders as a plain list item
+function DevLink({ link, mockup = false, variants }) {
   if (!link && link.hasError) return null;
 
   let icon;
@@ -71,13 +76,15 @@ function DevLink({ link, mockup = false }) {
   }
   return (
     link.platform && (
-      <li>
+      <motion.li variants={variants}>
         <a
           className={`rounded-lg p-4 text-white flex items-center justify-between w-[237px] h-[56px] hover:bg-opacity-50 transition-all duration-200 cursor-pointer ${
             link.platform === "Frontend Mentor"
               ? "!text-neutral-dark-grey border border-neutral-borders hover:bg-opacity-100 hover:bg-black/10"
               : ""
-          } ${bgColor} ${mockup ? "!h-[44px] mb-5" : "hover:-translate-y-0.5"}`}
+          } ${bgColor} ${
+            mockup ? "!h-[44px] mb-5" : "hover:-translate-y-0.5 hover:shadow-lg"
+          }`}
           href={link.link ? link.link : "#"}
           target={link.link ? "_blank" : ""}
         >
@@ -91,7 +98,7 @@ function DevLink({ link, mockup = false }) {
             />
           </span>
         </a>
-      </li>
+      </motion.li>
     )
   );
 }
