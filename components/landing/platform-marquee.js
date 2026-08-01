@@ -26,8 +26,11 @@ export default function PlatformMarquee() {
           className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-neutral-light-grey to-transparent"
         />
 
+        {/* The spacing lives on the items, not as a gap on the track: a gap
+            would add an extra step between the two halves and -50% would
+            stop short of a whole loop, which shows up as a jump */}
         <motion.ul
-          className="flex w-max gap-4"
+          className="flex w-max"
           animate={reduceMotion ? undefined : { x: ["0%", "-50%"] }}
           transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
         >
@@ -35,7 +38,7 @@ export default function PlatformMarquee() {
             <li
               key={`${platform.id}-${index}`}
               aria-hidden={index >= allMenuList.length}
-              className="flex items-center gap-3 rounded-xl border border-neutral-borders bg-white px-5 py-3 text-sm text-neutral-dark-grey"
+              className="mr-4 flex items-center gap-3 rounded-xl border border-neutral-borders bg-white px-5 py-3 text-sm text-neutral-dark-grey"
             >
               <span>
                 {React.cloneElement(platform.icon, {
