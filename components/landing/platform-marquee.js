@@ -1,13 +1,11 @@
-"use client";
-
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import allMenuList from "@/lib/all-menu-list";
 
 export default function PlatformMarquee() {
-  const reduceMotion = useReducedMotion();
-  // Two identical halves so the loop can reset at -50% without a visible jump
-  const track = [...allMenuList, ...allMenuList];
+  // Three copies, so that after the animation has moved a full copy off to
+  // the left there are still two left to cover the viewport. Two copies only
+  // just reach on a laptop and leave a gap on anything wider.
+  const track = [...allMenuList, ...allMenuList, ...allMenuList];
 
   return (
     <section className="border-y border-neutral-borders bg-neutral-light-grey py-10">
@@ -26,14 +24,9 @@ export default function PlatformMarquee() {
           className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-neutral-light-grey to-transparent"
         />
 
-        {/* The spacing lives on the items, not as a gap on the track: a gap
-            would add an extra step between the two halves and -50% would
-            stop short of a whole loop, which shows up as a jump */}
-        <motion.ul
-          className="flex w-max"
-          animate={reduceMotion ? undefined : { x: ["0%", "-50%"] }}
-          transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
-        >
+        {/* The spacing lives on the items rather than as a gap on the track:
+            a gap would add a step between copies that one third never covers */}
+        <ul className="flex w-max animate-marquee motion-reduce:animate-none">
           {track.map((platform, index) => (
             <li
               key={`${platform.id}-${index}`}
@@ -49,7 +42,7 @@ export default function PlatformMarquee() {
               <span className="whitespace-nowrap">{platform.name}</span>
             </li>
           ))}
-        </motion.ul>
+        </ul>
       </div>
     </section>
   );

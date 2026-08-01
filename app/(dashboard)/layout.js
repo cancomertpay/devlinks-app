@@ -33,15 +33,19 @@ export default function DashboardLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`h-screen box-border overflow-auto ${instrumentSans.className}`}
+        className={`flex min-h-screen flex-col box-border bg-neutral-light-grey ${instrumentSans.className}`}
       >
         <Provider>
           <DashboardHeader />
-          <main className="box-border bg-neutral-light-grey p-4 pb-20 lg:flex lg:gap-5">
+          {/* flex-1 so the grey surface reaches the bottom instead of ending
+              with the content and leaving a white band on tall screens */}
+          <main className="box-border flex-1 bg-neutral-light-grey p-4 pb-20 lg:flex lg:gap-5">
             <div className="hidden lg:flex w-5/12 items-center justify-center bg-white rounded-xl">
               <PhoneMockup />
             </div>
-            <div className="flex lg:w-7/12 lg:h-[810px] flex-col gap-10 bg-white rounded-xl pt-6 pb-4 md:pt-10">
+            {/* min-h rather than a fixed h, so the panel stretches with the
+                row instead of stopping short and leaving a gap below it */}
+            <div className="flex lg:w-7/12 lg:min-h-[810px] flex-col gap-10 bg-white rounded-xl pt-6 pb-4 md:pt-10">
               {children}
             </div>
           </main>

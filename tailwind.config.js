@@ -35,6 +35,17 @@ module.exports = {
         },
         error: "#FF3939",
       },
+      keyframes: {
+        // The track holds three copies of the list, so one third is exactly
+        // one copy: the row lands on an identical frame and repeats seamlessly
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-33.333333%)" },
+        },
+      },
+      animation: {
+        marquee: "marquee 34s linear infinite",
+      },
       boxShadow: {
         // Used by the inputs and the dropdown on hover/focus, kept subtle
         "3xl": "0px 2px 10px rgba(0, 0, 0, 0.12)",

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Loading from "@/components/UI/loading/loading";
 import { createContext, useContext, useEffect } from "react";
-import { logout } from "@/lib/actions/auth";
 
 const AuthContext = createContext();
 
@@ -29,20 +28,46 @@ export const AuthContextProvider = ({ children }) => {
 export function RouteProtection({ children }) {
   const { user, loading } = useAuthContext();
   const router = useRouter();
+
+  // Redirecting from the render body warns about updating another component
+  // mid-render, so the navigation happens after the render commits
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login");
+    }
+  }, [user, loading, router]);
+
   if (loading) {
     return <Loading />;
   }
-  if (user) {
-    return <>{children}</>;
-  } else {
-    router.push("/register");
+
+  if (!user) {
     return null;
   }
+
+  return <>{children}</>;
 }
 
+// Guards the login and register pages. It used to sign the visitor out on
+// mount, so merely opening /login ended an active session. Someone already
+// signed in is sent to their links instead.
 export function AuthRouteProtection({ children }) {
+  const [user, loading] = useAuthState(auth);
+  const router = useRouter();
+
   useEffect(() => {
-    logout();
-  }, []);
+    if (!loading && user) {
+      router.replace("/customize-links");
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (user) {
+    return null;
+  }
+
   return <>{children}</>;
 }
