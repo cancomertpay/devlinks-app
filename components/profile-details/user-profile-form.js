@@ -28,7 +28,7 @@ function UserProfileForm() {
             </>
           )}
         </div>
-        <div className="sticky bottom-0 z-10 bg-white pt-5">
+        <div className="sticky bottom-0 z-10 rounded-b-xl bg-white pt-5 pb-4">
           <hr className="mb-5 border-neutral-borders" />
           <div className="px-6 md:text-end">
             <div className="md:inline-flex">
