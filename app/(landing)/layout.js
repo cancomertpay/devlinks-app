@@ -18,7 +18,7 @@ const instrumentSans = Instrument_Sans({
 
 // metadata
 export const metadata = {
-  title: "Devlinks — every link you own, on one page",
+  title: "Devlinks",
   description:
     "Devlinks turns your scattered developer profiles into a single shareable page. Add your links, drag them into order, and share one URL.",
 };
