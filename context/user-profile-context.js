@@ -1,12 +1,11 @@
 "use client";
 
-import { auth, storage } from "@/firebase-config";
 import {
   getUserProfileData,
   submitUserProfileDatas,
 } from "@/lib/actions/dashboard";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const UserProfileContext = createContext();
 
@@ -27,13 +26,13 @@ export default function UserProfileProvider({ children }) {
     email: "",
     profile_picture: "",
   });
-  const [userProfilePicFile, setUserProfilePicFile] = useState(null);
+  // Resized JPEG data URL of a newly picked picture, waiting to be saved
+  const [userProfilePicData, setUserProfilePicData] = useState(null);
   const [userProfilePicURL, setUserProfilePicURL] = useState(null);
   const [userProfilePicMockup, setUserProfilePicMockup] = useState(null);
   const [hasAnyChanges, setHasAnyChanges] = useState(false);
   const [errorObject, setErrorObject] = useState({});
   const [hasError, setHasError] = useState(false);
-  const [imageProcessLoading, setImageProcessLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
@@ -42,35 +41,9 @@ export default function UserProfileProvider({ children }) {
     setUserProfilePicMockup(imageURL);
   };
 
-  const handleUserProfilePic = (imageFile) => {
+  const handleUserProfilePic = (imageDataURL) => {
     setHasAnyChanges(true);
-    setUserProfilePicFile(imageFile);
-  };
-
-  const postUserProfilePicFileIntoStorage = async (picFile) => {
-    const currentUser = auth?.currentUser;
-    if (!currentUser) {
-      throw new Error("User not found");
-    }
-
-    setImageProcessLoading(true);
-    const storageRef = ref(
-      storage,
-      `users/${currentUser?.displayName}/profile_picture`
-    );
-
-    try {
-      const uploadTask = uploadBytesResumable(storageRef, picFile);
-
-      const snapshot = await uploadTask;
-
-      const downloadURL = await getDownloadURL(snapshot.ref);
-      return downloadURL;
-    } catch (error) {
-      console.error("Image cannot be uploaded!", error);
-    } finally {
-      setImageProcessLoading(false);
-    }
+    setUserProfilePicData(imageDataURL);
   };
 
   const handleFieldEdit = (value) => {
@@ -80,7 +53,6 @@ export default function UserProfileProvider({ children }) {
   const handleError = (error) => {
     setErrorObject(error);
   };
-  console.log(errorObject);
 
   const handleUserInputs = (name, value) => {
     setUserObject((prev) => ({
@@ -110,23 +82,27 @@ export default function UserProfileProvider({ children }) {
 
     setLoading(true);
 
-    if (userProfilePicFile) {
-      const picURL = await postUserProfilePicFileIntoStorage(
-        userProfilePicFile
-      );
-      setUserProfilePicURL(picURL);
-      setUserObject((prev) => ({ ...prev, profile_picture: picURL }));
+    // The picture travels with the rest of the profile as a data URL, so there
+    // is a single write and no way to end up with an undefined picture field
+    const profileToSave = userProfilePicData
+      ? { ...userObject, profile_picture: userProfilePicData }
+      : userObject;
 
-      await submitUserProfileDatas({
-        ...userObject,
-        profile_picture: picURL,
-      });
-    } else {
-      await submitUserProfileDatas(userObject);
+    try {
+      await submitUserProfileDatas(profileToSave);
+
+      if (userProfilePicData) {
+        setUserObject(profileToSave);
+        setUserProfilePicURL(userProfilePicData);
+        setUserProfilePicData(null);
+      }
+
+      setHasAnyChanges(false);
+    } catch (error) {
+      toast.error("Your changes could not be saved. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    setHasAnyChanges(false);
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -138,23 +114,28 @@ export default function UserProfileProvider({ children }) {
     setLoading(true);
     getUserProfileData()
       .then((userData) => {
+        // A brand new account has no profile node yet, keep the empty defaults
+        if (!userData) return;
+
         setUserObject(userData);
-        setUserProfilePicURL(userData.profile_picture);
-        setLoading(false);
+        setUserProfilePicURL(userData.profile_picture || null);
       })
       .catch((error) => {
+        console.error("User profile could not be loaded", error);
+        toast.error("Your profile could not be loaded.");
+      })
+      .finally(() => {
         setLoading(false);
-        throw new Error(error);
       });
   }, []);
 
   useEffect(() => {
-    if (hasAnyChanges && !hasError && !loading && !imageProcessLoading) {
+    if (hasAnyChanges && !hasError && !loading) {
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
     }
-  }, [hasAnyChanges, hasError, errorObject, loading, imageProcessLoading]);
+  }, [hasAnyChanges, hasError, errorObject, loading]);
 
   const values = {
     userProfilePicMockup,

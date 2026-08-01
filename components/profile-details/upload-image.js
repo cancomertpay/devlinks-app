@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useUserProfileContext } from "@/context/user-profile-context";
 import NextImage from "next/image";
 import UploadImageIcon from "../UI/icons/upload-image-icon";
+import { resizeImageToDataURL } from "@/lib/utils/helpers";
 
 export default function UploadImage() {
   const {
@@ -18,10 +19,6 @@ export default function UploadImage() {
   const [imageUrl, setImageUrl] = useState(userProfilePicURL);
   const [error, setError] = useState(errorObject?.["profile_picture"]);
   const [isFieldDirty, setIsFieldDirty] = useState(false);
-
-  console.log("imageUrl", imageUrl);
-  console.log("error", error);
-  console.log("isFieldDirty", isFieldDirty);
 
   useEffect(() => {
     handleFieldEdit(isFieldDirty);
@@ -43,17 +40,26 @@ export default function UploadImage() {
     handleUserProfilePicMockup(imageUrl)
   }, [imageUrl])
 
-  const handleImageChange = (event) => {
+  const handleImageChange = async (event) => {
     const file = event.target.files[0];
 
     if (!file) return;
 
     setIsFieldDirty(true);
 
-    const img = new Image();
-    img.src = URL.createObjectURL(file);
-    img.onload = async function () {
-      if (img.width > 1024 || img.height > 1024) {
+    if (!["image/jpeg", "image/png"].includes(file.type)) {
+      setError((prev) => ({
+        ...prev,
+        profile_picture: { status: true, message: "Use PNG or JPG format." },
+      }));
+      setImageUrl(null);
+      return;
+    }
+
+    try {
+      const { dataURL, width, height } = await resizeImageToDataURL(file);
+
+      if (width > 1024 || height > 1024) {
         setError((prev) => ({
           ...prev,
           profile_picture: {
@@ -62,25 +68,22 @@ export default function UploadImage() {
           },
         }));
         setImageUrl(null);
-      } else if (!["image/jpeg", "image/png"].includes(file.type)) {
-        setError((prev) => ({
-          ...prev,
-          profile_picture: { status: true, message: "Use PNG or JPG format." },
-        }));
-        setImageUrl(null);
-      } else {
-        setError((prev) => ({
-          ...prev,
-          profile_picture: { status: false, message: "" },
-        }));
-        try {
-          handleUserProfilePic(file);
-          setImageUrl(img.src);
-        } catch (error) {
-          setError({ status: true, message: "Image upload failed." });
-        }
+        return;
       }
-    };
+
+      setError((prev) => ({
+        ...prev,
+        profile_picture: { status: false, message: "" },
+      }));
+      handleUserProfilePic(dataURL);
+      setImageUrl(dataURL);
+    } catch (error) {
+      setError((prev) => ({
+        ...prev,
+        profile_picture: { status: true, message: "Image could not be read." },
+      }));
+      setImageUrl(null);
+    }
   };
 
   return (
