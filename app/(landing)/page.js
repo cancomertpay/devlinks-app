@@ -1,6 +1,17 @@
-import { redirect } from "next/navigation";
+import Hero from "@/components/landing/hero";
+import PlatformMarquee from "@/components/landing/platform-marquee";
+import Features from "@/components/landing/features";
+import FinalCta from "@/components/landing/final-cta";
+import LandingFooter from "@/components/landing/footer";
 
-export default async function Home() {
-  // landing page coming soon redirect to customize links for now
-  redirect("/customize-links");
+export default function Home() {
+  return (
+    <>
+      <Hero />
+      <PlatformMarquee />
+      <Features />
+      <FinalCta />
+      <LandingFooter />
+    </>
+  );
 }
