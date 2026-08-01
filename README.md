@@ -1,11 +1,11 @@
-# 🌐 Devlinks App
+# 🌐 Devlinks
 
-I have developed a fullstack application named **Devlinks** using **Next.js**, **Firebase**, and **TailwindCSS**. The application is fully functional and has passed all tests successfully.
+A link-in-bio page for developers. Add the profiles you actually use — GitHub, LinkedIn, Dev.to and eight more — drag them into the order you want, and hand out one URL instead of ten.
 
 ## ✨ Features
 - **Fully Responsive Design** 📱: Ensures optimal viewing experience across all devices.
 - **Animated Landing Page** 🎬: An introduction to the product built with Framer Motion, honouring `prefers-reduced-motion`.
-- **User Authentication & Profile Management** 🔐: Supports user login, registration, and profile information storage.
+- **User Authentication & Profile Management** 🔐: Email and password, Google and GitHub sign-in, password reset, and profile information storage.
 - **Realtime Database Integration** ⚡: Enables instant communication and securely stores all changes in the database.
 - **Optimized SSR and CSR** 🚀: Implements Server-Side Rendering (SSR) and Client-Side Rendering (CSR) for the best performance.
 - **Enhanced User Interaction** 🎨: Incorporates design initiatives to improve user engagement where necessary.
@@ -52,7 +52,17 @@ Then start the dev server:
 npm run dev
 ```
 
-The Firebase project needs Email/Password authentication and a Realtime Database. Cloud Storage is not required.
+### Firebase setup
+
+In the Firebase console, under **Authentication → Sign-in method**, enable:
+
+- **Email/Password** — used by the signup, login and password reset flows
+- **Google** — no extra configuration needed
+- **GitHub** — create an OAuth App on GitHub and paste its client ID and secret, then copy Firebase's callback URL back into the GitHub app
+
+Then, under **Authentication → Settings → Authorized domains**, add the domain you deploy to. Popup sign-in is rejected on any domain that is not listed, while email and password sign-in is not affected — so a missing entry only breaks the Google and GitHub buttons.
+
+You also need a **Realtime Database**. Cloud Storage is not required.
 
 ## 🎥 Preview
 ![App Preview](https://res.cloudinary.com/dz209s6jk/image/upload/f_auto,q_auto,w_700/Challenges/thypgk1nmxm4modj1wdl.jpg)
