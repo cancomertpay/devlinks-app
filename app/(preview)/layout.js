@@ -32,18 +32,21 @@ export default function PreviewLayout({ children }) {
         className={`relative min-h-screen box-border overflow-x-hidden bg-gradient-to-b from-white via-neutral-light-purple/30 to-neutral-light-purple/60 ${instrumentSans.className}`}
       >
         <PreviewHeader />
-        <div className="hidden md:block absolute top-0 right-0 w-full h-[40vh] rounded-bl-3xl rounded-br-3xl bg-gradient-to-br from-primary-index via-[#5B32FF] to-[#8B6BFF] -z-10" />
-        {/* Soft light spots so the banner is not one flat block of purple */}
+        {/* Shown on phones too: the card no longer covers the full width, so
+            the banner is what the page is read against at every size */}
+        <div className="absolute top-0 right-0 w-full h-[300px] md:h-[40vh] rounded-bl-3xl rounded-br-3xl bg-gradient-to-br from-primary-index via-[#5B32FF] to-[#8B6BFF] -z-10" />
+        {/* Soft light spots so the banner is not one flat block of purple.
+            They hang past the edges on purpose, so they are clipped here —
+            overflow-x on the body alone does not stop that on a phone. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-white/20 blur-3xl -z-10"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute top-1/3 -right-20 h-80 w-80 rounded-full bg-primary-hover/40 blur-3xl -z-10"
-        />
-        <div className="md:w-full md:flex md:items-center md:justify-center md:mt-20 lg:mt-10 md:pb-20">
-          <main className="box-border w-full md:w-[50%] lg:w-[25%] md:rounded-3xl md:p-1 md:shadow-[0_24px_60px_-20px_rgba(99,60,255,0.45)] bg-white">
+          className="pointer-events-none absolute inset-0 overflow-hidden -z-10"
+        >
+          <div className="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-white/20 blur-3xl" />
+          <div className="absolute top-1/3 -right-20 h-80 w-80 rounded-full bg-primary-hover/40 blur-3xl" />
+        </div>
+        <div className="w-full flex items-center justify-center px-4 pb-16 md:mt-20 md:px-0 md:pb-20 lg:mt-10">
+          <main className="box-border w-full max-w-md rounded-3xl p-1 shadow-[0_24px_60px_-20px_rgba(99,60,255,0.45)] bg-white md:w-[50%] lg:w-[25%]">
             <Toaster
               position="bottom-center"
               toastOptions={{

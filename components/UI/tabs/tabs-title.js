@@ -32,7 +32,7 @@ function TabsTitle({ children }) {
     <div
       onMouseEnter={() => handleMouseEnter(id)}
       onMouseLeave={() => handleMouseLeave(id)}
-      className={`flex items-center justify-center gap-2 py-3 px-7 font-semibold rounded-lg text-neutral-grey hover:text-primary-index  ${
+      className={`flex items-center justify-center gap-2 py-3 px-3 md:px-7 font-semibold rounded-lg text-neutral-grey hover:text-primary-index  ${
         activePath === id ? "text-primary-index bg-neutral-light-purple" : ""
       } `}
     >

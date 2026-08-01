@@ -39,13 +39,14 @@ export default function DashboardLayout({ children }) {
           <DashboardHeader />
           {/* flex-1 so the grey surface reaches the bottom instead of ending
               with the content and leaving a white band on tall screens */}
-          <main className="box-border flex-1 bg-neutral-light-grey p-4 pb-20 lg:flex lg:gap-5">
+          <main className="box-border flex flex-1 flex-col gap-5 bg-neutral-light-grey p-4 lg:flex-row">
             <div className="hidden lg:flex w-5/12 items-center justify-center bg-white rounded-xl">
               <PhoneMockup />
             </div>
-            {/* No fixed height: the panel stretches with the row, and the page
-                inside decides which of its sections absorbs the extra space */}
-            <div className="flex lg:w-7/12 flex-col gap-10 bg-white rounded-xl pt-6 pb-4 md:pt-10">
+            {/* No fixed height. On a phone flex-1 makes the panel fill what is
+                left of the screen so the page inside can pin Save to the
+                bottom; from lg the width takes over and the row stretches it */}
+            <div className="flex min-h-0 flex-1 flex-col gap-10 bg-white rounded-xl pt-6 pb-4 md:pt-10 lg:w-7/12 lg:flex-none">
               {children}
             </div>
           </main>
