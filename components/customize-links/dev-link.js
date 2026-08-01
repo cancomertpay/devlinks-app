@@ -77,7 +77,7 @@ function DevLink({ link, mockup = false }) {
             link.platform === "Frontend Mentor"
               ? "!text-neutral-dark-grey border border-neutral-borders hover:bg-opacity-100 hover:bg-black/10"
               : ""
-          } ${bgColor} ${mockup ? "!h-[44px] mb-5" : "hover:scale-105"}`}
+          } ${bgColor} ${mockup ? "!h-[44px] mb-5" : "hover:-translate-y-0.5"}`}
           href={link.link ? link.link : "#"}
           target={link.link ? "_blank" : ""}
         >

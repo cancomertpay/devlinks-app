@@ -6,10 +6,14 @@ import toast from "react-hot-toast";
 import { auth } from "@/firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import CopiedIcon from "../UI/icons/link-copied-clipboard";
+import { useParams } from "next/navigation";
 
 function PreviewHeader() {
   const [user] = useAuthState(auth);
-  const isUserLoggedIn = !!user;
+  const { displayName } = useParams();
+  // The editor bar belongs to the owner of the page, not to every visitor
+  // who happens to be logged in while viewing someone else's profile
+  const isOwnPreview = !!user && user.displayName === displayName;
   const shareLink = () => {
     const url = window.location.href;
 
@@ -29,7 +33,7 @@ function PreviewHeader() {
 
   return (
     <header className="w-full h-[78px] md:p-4">
-      {isUserLoggedIn && (
+      {isOwnPreview && (
         <div className="p-4 flex items-center justify-between gap-3 md:bg-white md:rounded-xl">
           <div className="flex-1 md:flex-none">
             <Link

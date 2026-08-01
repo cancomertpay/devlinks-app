@@ -34,7 +34,7 @@ export default function DisplayUserProfile({ profile }) {
         </h1>
       </div>
       <a
-        className="text-neutral-grey hover:text-neutral-dark-grey/50 hover:scale-105 transition-all cursor-pointer duration-300 ease-in-out"
+        className="text-neutral-grey hover:text-neutral-dark-grey/50 transition-all cursor-pointer duration-300 ease-in-out"
         href={`mailto:${profile?.email}`}
       >
         {profile?.email}

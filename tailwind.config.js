@@ -36,7 +36,8 @@ module.exports = {
         error: "#FF3939",
       },
       boxShadow: {
-        "3xl": "0px 5px 15px rgba(0, 0, 0, 0.35)",
+        // Used by the inputs and the dropdown on hover/focus, kept subtle
+        "3xl": "0px 2px 10px rgba(0, 0, 0, 0.12)",
         "4xl": "0px 3px 8px rgba(0, 0, 0, 0.24)",
       },
       dropShadow: {
