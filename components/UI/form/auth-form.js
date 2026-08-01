@@ -1,6 +1,7 @@
 import Button from "../button/button";
 import Input from "../input/input";
 import Link from "next/link";
+import SocialAuthButtons from "./social-auth-buttons";
 
 function AuthForm({ action, state, type = "login" }) {
   if (!action) {
@@ -68,9 +69,23 @@ function AuthForm({ action, state, type = "login" }) {
         )}
       </div>
 
+      {!registerForm && (
+        <div className="-mt-2 text-right">
+          <Link
+            href="/forgot-password"
+            className="text-sm text-neutral-grey transition-colors duration-300 ease-in-out hover:text-primary-index"
+          >
+            Forgot password?
+          </Link>
+        </div>
+      )}
+
       <Button style="primary" disabled={false}>
         {registerForm ? "Create new account" : "Login"}
       </Button>
+
+      <SocialAuthButtons />
+
       <div>
         <div className="text-center">
           {registerForm ? (

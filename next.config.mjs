@@ -7,6 +7,17 @@ const nextConfig = {
         hostname: "firebasestorage.googleapis.com",
         pathname: "**",
       },
+      // Avatars that come with a Google or GitHub sign-in
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        pathname: "**",
+      },
     ],
   },
 };

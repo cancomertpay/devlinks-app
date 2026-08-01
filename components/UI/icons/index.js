@@ -11,9 +11,11 @@ import StackOverflow from "./stack-overflow";
 import Youtube from "./youtube";
 import Email from "./email";
 import RightArrow from "./right-arrow";
+import Google from "./google";
 
 export {
   Github,
+  Google,
   Codewars,
   Devto,
   Facebook,
