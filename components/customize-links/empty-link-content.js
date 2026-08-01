@@ -2,7 +2,7 @@ import Image from "next/image";
 
 function EmptyLinkContent() {
   return (
-    <div className="w-full h-[377px] lg:h-[470px] mb-5 flex flex-col items-center justify-center gap-10 px-4 py-14 rounded-xl bg-neutral-light-grey">
+    <div className="w-full h-full min-h-[377px] mb-5 flex flex-col items-center justify-center gap-10 px-4 py-14 rounded-xl bg-neutral-light-grey">
       <Image
         src="/images/illustration-empty.svg"
         alt="empt illustration"

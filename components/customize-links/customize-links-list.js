@@ -51,10 +51,10 @@ export default function LinksList({ links }) {
       collisionDetection={closestCorners}
     >
       <SortableContext items={links} strategy={verticalListSortingStrategy}>
+        {/* Scrolling belongs to the section around this list now, so the list
+            itself only needs a floor to stand on */}
         <Droppable
-          className={`min-h-[397px] md:max-h-[660px] lg:h-[490px] w-full md:overflow-auto ${
-            links.length > 1 ? "pb-28" : ""
-          }`}
+          className={`min-h-[397px] w-full ${links.length > 1 ? "pb-28" : ""}`}
         >
           {links?.map((devlink, index) => (
             <Draggable

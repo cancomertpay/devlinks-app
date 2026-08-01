@@ -43,9 +43,9 @@ export default function DashboardLayout({ children }) {
             <div className="hidden lg:flex w-5/12 items-center justify-center bg-white rounded-xl">
               <PhoneMockup />
             </div>
-            {/* min-h rather than a fixed h, so the panel stretches with the
-                row instead of stopping short and leaving a gap below it */}
-            <div className="flex lg:w-7/12 lg:min-h-[810px] flex-col gap-10 bg-white rounded-xl pt-6 pb-4 md:pt-10">
+            {/* No fixed height: the panel stretches with the row, and the page
+                inside decides which of its sections absorbs the extra space */}
+            <div className="flex lg:w-7/12 flex-col gap-10 bg-white rounded-xl pt-6 pb-4 md:pt-10">
               {children}
             </div>
           </main>
