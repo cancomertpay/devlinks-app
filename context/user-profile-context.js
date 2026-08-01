@@ -120,8 +120,7 @@ export default function UserProfileProvider({ children }) {
         setUserObject(userData);
         setUserProfilePicURL(userData.profile_picture || null);
       })
-      .catch((error) => {
-        console.error("User profile could not be loaded", error);
+      .catch(() => {
         toast.error("Your profile could not be loaded.");
       })
       .finally(() => {
