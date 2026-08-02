@@ -6,8 +6,14 @@ import { auth } from "@/firebase-config";
 import NotFoundContent from "@/components/UI/not-found/not-found-content";
 
 function NotFound() {
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const { displayName } = useParams();
+
+  // Deciding before the session is known would flash "user not found" at the
+  // owner of the page, and that first frame is the one they remember
+  if (loading) {
+    return null;
+  }
 
   // Reaching your own page before you have set anything up is not an error,
   // so the owner gets an invitation to start rather than a dead end
