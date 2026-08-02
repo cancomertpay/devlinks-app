@@ -2,7 +2,9 @@ import Image from "next/image";
 
 function EmptyLinkContent() {
   return (
-    <div className="w-full h-full min-h-[377px] mb-5 flex flex-col items-center justify-center gap-10 px-4 py-14 rounded-xl bg-neutral-light-grey">
+    // No bottom margin: h-full already fills the section, and the margin on
+    // top of it overflowed by exactly its own height and put a scrollbar there
+    <div className="w-full h-full min-h-[377px] flex flex-col items-center justify-center gap-10 px-4 py-14 rounded-xl bg-neutral-light-grey">
       <Image
         src="/images/illustration-empty.svg"
         alt="empt illustration"
