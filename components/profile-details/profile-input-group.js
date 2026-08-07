@@ -121,6 +121,13 @@ export default function ProfileInputGroup() {
       return;
     }
 
+    // Leaving the field without having changed anything asks nothing: the name
+    // already on this profile belongs to it, so there is no answer to look up
+    if (candidate === sanitizeUsername(userObject["username"])) {
+      setUsernameStatus("idle");
+      return;
+    }
+
     if (!valid) {
       setError((prev) => ({
         ...prev,
