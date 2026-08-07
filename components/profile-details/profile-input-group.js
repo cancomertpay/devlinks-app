@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Input from "../UI/input/input";
 import { useUserProfileContext } from "@/context/user-profile-context";
-import { isUsernameAvailable } from "@/lib/actions/username";
+import { isUsernameAvailable, suggestUsernames } from "@/lib/actions/username";
 import { sanitizeUsername, validateUsername, TITLE_MAX_LENGTH } from "@/lib/definitions";
 import { auth } from "@/firebase-config";
 
@@ -29,6 +29,48 @@ export default function ProfileInputGroup() {
   // "idle" | "checking" | "available" — only ever a hint. Two people can read
   // "available" in the same instant; the database rule is what decides.
   const [usernameStatus, setUsernameStatus] = useState("idle");
+  const [suggestions, setSuggestions] = useState([]);
+
+  // Offered only while the field is empty: once someone has typed a name of
+  // their own, replacing it with a guess is not help
+  useEffect(() => {
+    if (username || (!firstName?.trim() && !lastName?.trim())) {
+      setSuggestions([]);
+      return;
+    }
+
+    let current = true;
+
+    // Waits for a pause in typing, so a name being entered letter by letter
+    // does not send a round of lookups per keystroke
+    const timer = setTimeout(() => {
+      suggestUsernames(firstName, lastName, auth.currentUser?.displayName)
+        .then((names) => {
+          if (current) setSuggestions(names);
+        })
+        .catch(() => {
+          if (current) setSuggestions([]);
+        });
+    }, 600);
+
+    return () => {
+      current = false;
+      clearTimeout(timer);
+    };
+  }, [username, firstName, lastName]);
+
+  const pickSuggestion = (name) => {
+    setUsername(name);
+    setIsFieldDirty(true);
+    setError((prev) => ({
+      ...prev,
+      username: { status: false, message: "" },
+    }));
+    handleUserInputs("username", name);
+    // Already confirmed free while building the list, so it says so instead of
+    // making the person click away and back to find out
+    setUsernameStatus("available");
+  };
 
   useEffect(() => {
     setUsername(userObject["username"] ?? "");
@@ -177,6 +219,24 @@ export default function ProfileInputGroup() {
               ? "Available — your page will be at /" + username
               : "Checking…"}
           </p>
+        </div>
+      )}
+
+      {suggestions.length > 0 && (
+        <div className="md:flex md:justify-end">
+          <div className="flex flex-wrap items-center gap-2 md:w-7/12">
+            <span className="text-xs text-neutral-grey">Available:</span>
+            {suggestions.map((name) => (
+              <button
+                key={name}
+                type="button"
+                onClick={() => pickSuggestion(name)}
+                className="rounded-full bg-neutral-light-purple px-2.5 py-1 text-xs font-bold text-primary-index transition-colors duration-200 hover:bg-primary-index hover:text-white"
+              >
+                @{name}
+              </button>
+            ))}
+          </div>
         </div>
       )}
       <Input
