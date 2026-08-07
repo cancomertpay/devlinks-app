@@ -57,6 +57,16 @@ function PhoneMockup() {
               <p className="text-neutral-dark-grey text-center font-semibold text-lg w-[90%] mt-5 bg-white overflow-hidden">
                 {userObject.first_name} {userObject.last_name}
               </p>
+              {/* One line only, and nothing at all when empty: the links list
+                  starts at a fixed offset below, so a second line here would
+                  push the email into it */}
+              {userObject.title ? (
+                <p className="text-sm text-neutral-grey text-center w-[90%] bg-white truncate">
+                  {userObject.title}
+                </p>
+              ) : (
+                ""
+              )}
               <a
                 href={`mailto:${userObject.email}`}
                 className="text-sm text-neutral-grey text-center w-[90%] bg-white overflow-hidden hover:text-neutral-dark-grey/50 transition-colors cursor-pointer duration-300 ease-in-out"

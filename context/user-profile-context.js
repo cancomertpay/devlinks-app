@@ -4,7 +4,13 @@ import {
   getUserProfileData,
   submitUserProfileDatas,
 } from "@/lib/actions/dashboard";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  claimUsername,
+  USERNAME_INVALID,
+  USERNAME_TAKEN,
+} from "@/lib/actions/username";
+import { auth } from "@/firebase-config";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 const UserProfileContext = createContext();
@@ -21,11 +27,17 @@ export const useUserProfileContext = () => {
 
 export default function UserProfileProvider({ children }) {
   const [userObject, setUserObject] = useState({
+    username: "",
+    title: "",
     first_name: "",
     last_name: "",
     email: "",
     profile_picture: "",
   });
+  // The name currently held in the usernames table, which is what has to be
+  // released when a new one is claimed. Kept apart from userObject because
+  // that one changes as the person types.
+  const savedUsername = useRef("");
   // Resized JPEG data URL of a newly picked picture, waiting to be saved
   const [userProfilePicData, setUserProfilePicData] = useState(null);
   const [userProfilePicURL, setUserProfilePicURL] = useState(null);
@@ -89,7 +101,16 @@ export default function UserProfileProvider({ children }) {
       : userObject;
 
     try {
-      await submitUserProfileDatas(profileToSave);
+      // Claimed before the profile is written: if the name has just been taken
+      // by someone else, the profile must not be saved still holding it
+      const username = await claimUsername(
+        auth.currentUser?.displayName,
+        profileToSave.username,
+        savedUsername.current
+      );
+      savedUsername.current = username;
+
+      await submitUserProfileDatas({ ...profileToSave, username });
 
       if (userProfilePicData) {
         setUserObject(profileToSave);
@@ -99,7 +120,15 @@ export default function UserProfileProvider({ children }) {
 
       setHasAnyChanges(false);
     } catch (error) {
-      toast.error("Your changes could not be saved. Please try again.");
+      if (error?.code === USERNAME_TAKEN || error?.code === USERNAME_INVALID) {
+        setErrorObject((prev) => ({
+          ...prev,
+          username: { status: true, message: error.message },
+        }));
+        toast.error(error.message);
+      } else {
+        toast.error("Your changes could not be saved. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -117,7 +146,12 @@ export default function UserProfileProvider({ children }) {
         // A brand new account has no profile node yet, keep the empty defaults
         if (!userData) return;
 
-        setUserObject(userData);
+        savedUsername.current = userData.username ?? "";
+
+        // Merged onto the defaults rather than replacing them: a profile saved
+        // before username and title existed has no key for either, and an
+        // undefined value would turn those inputs uncontrolled
+        setUserObject((prev) => ({ ...prev, ...userData }));
         setUserProfilePicURL(userData.profile_picture || null);
       })
       .catch(() => {

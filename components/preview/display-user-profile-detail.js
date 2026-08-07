@@ -67,6 +67,17 @@ export default function DisplayUserProfile({ profile }) {
         </h1>
       </motion.div>
 
+      {/* Nothing rendered when empty, so the gap between name and email stays
+          closed for the profiles that never filled it in */}
+      {profile?.title ? (
+        <motion.p
+          variants={item}
+          className="w-[90%] -mt-2 text-center text-neutral-grey"
+        >
+          {profile.title}
+        </motion.p>
+      ) : null}
+
       <motion.a
         variants={item}
         className="text-neutral-grey hover:text-primary-index transition-colors cursor-pointer duration-300 ease-in-out"

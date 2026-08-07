@@ -34,6 +34,14 @@ function LandingHeader() {
       </Link>
 
       <nav className="flex items-center gap-1 md:gap-3">
+        {/* Outside the signed-in check: discover is public, and someone with no
+            account is exactly who it is there for */}
+        <Link
+          href="/discover"
+          className="whitespace-nowrap rounded-md px-3 py-3 text-sm font-bold text-neutral-grey transition-colors duration-300 ease-in-out hover:text-primary-index md:px-4"
+        >
+          Discover
+        </Link>
         {user ? (
           <Link
             href="/customize-links"
