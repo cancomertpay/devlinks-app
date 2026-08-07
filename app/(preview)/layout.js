@@ -21,6 +21,13 @@ const instrumentSans = Instrument_Sans({
 // metadata
 // Overridden per profile by generateMetadata in [displayName]/page.js
 export const metadata = {
+  // What the relative og:url and the generated preview image are resolved
+  // against. Crawlers need an absolute address, so deployments have to set
+  // NEXT_PUBLIC_SITE_URL — locally it falls back to the dev server, which no
+  // crawler can reach anyway.
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  ),
   title: "Devlinks",
   description: "A Devlinks page.",
 };

@@ -1,29 +1,128 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
-// A still life of the real discover page rather than a screenshot, so it keeps
-// up with the design tokens and stays sharp at every size
-const sampleResults = [
+// A running demo of the real discover page rather than a screenshot, so it
+// keeps up with the design tokens and stays sharp at every size.
+//
+// Every scene returns two results on purpose: a varying count would resize the
+// panel mid-loop and shove the section below it up and down.
+const SCENES = [
   {
-    initials: "BW",
-    name: "Ben Wright",
-    username: "benwright",
-    title: "Frontend Developer",
-    platforms: ["GitHub", "LinkedIn"],
+    query: "frontend",
+    results: [
+      {
+        initials: "BW",
+        name: "Ben Wright",
+        username: "benwright",
+        title: "Frontend Developer",
+        platforms: ["GitHub", "LinkedIn"],
+      },
+      {
+        initials: "AR",
+        name: "Ada Reyes",
+        username: "adareyes",
+        title: "Frontend Engineer",
+        platforms: ["Dev.to", "GitLab"],
+      },
+    ],
   },
   {
-    initials: "AR",
-    name: "Ada Reyes",
-    username: "adareyes",
-    title: "Frontend Engineer",
-    platforms: ["Dev.to", "GitLab"],
+    query: "github",
+    results: [
+      {
+        initials: "SO",
+        name: "Sam Okafor",
+        username: "samokafor",
+        title: "Backend Developer",
+        platforms: ["GitHub", "Hashnode"],
+      },
+      {
+        initials: "BW",
+        name: "Ben Wright",
+        username: "benwright",
+        title: "Frontend Developer",
+        platforms: ["GitHub", "LinkedIn"],
+      },
+    ],
+  },
+  {
+    query: "designer",
+    results: [
+      {
+        initials: "MC",
+        name: "Mia Chen",
+        username: "miachen",
+        title: "Product Designer",
+        platforms: ["Frontend Mentor", "YouTube"],
+      },
+      {
+        initials: "LB",
+        name: "Leo Brandt",
+        username: "leobrandt",
+        title: "UI Designer",
+        platforms: ["Codewars", "LinkedIn"],
+      },
+    ],
   },
 ];
 
+// Deleting runs faster than typing, the way a real backspace does
+const TYPE_MS = 85;
+const DELETE_MS = 40;
+const RESULTS_DELAY_MS = 350;
+const HOLD_MS = 2400;
+const NEXT_SCENE_MS = 400;
+
 export default function DiscoverHighlight() {
   const reduceMotion = useReducedMotion();
+
+  const [sceneIndex, setSceneIndex] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [phase, setPhase] = useState("typing");
+
+  const scene = SCENES[sceneIndex];
+  // Results belong to the pause after typing, which is also when a real search
+  // would have come back
+  const showResults = reduceMotion || phase === "holding";
+
+  useEffect(() => {
+    // One scene, fully typed, no timers at all
+    if (reduceMotion) {
+      setTyped(SCENES[0].query);
+      return;
+    }
+
+    const { query } = SCENES[sceneIndex];
+    let timer;
+
+    if (phase === "typing") {
+      timer =
+        typed.length < query.length
+          ? setTimeout(
+              () => setTyped(query.slice(0, typed.length + 1)),
+              TYPE_MS
+            )
+          : setTimeout(() => setPhase("holding"), RESULTS_DELAY_MS);
+    } else if (phase === "holding") {
+      timer = setTimeout(() => setPhase("deleting"), HOLD_MS);
+    } else {
+      timer =
+        typed.length > 0
+          ? setTimeout(
+              () => setTyped(query.slice(0, typed.length - 1)),
+              DELETE_MS
+            )
+          : setTimeout(() => {
+              setSceneIndex((index) => (index + 1) % SCENES.length);
+              setPhase("typing");
+            }, NEXT_SCENE_MS);
+    }
+
+    return () => clearTimeout(timer);
+  }, [phase, typed, sceneIndex, reduceMotion]);
 
   const appear = {
     hidden: { opacity: 0, y: reduceMotion ? 0 : 24 },
@@ -72,9 +171,13 @@ export default function DiscoverHighlight() {
           </div>
         </div>
 
-        {/* Decorative: everything it says is already in the copy beside it */}
+        {/* Decorative: everything it demonstrates is already in the copy beside
+            it, so a screen reader loses nothing by skipping it */}
         <div aria-hidden className="rounded-2xl bg-neutral-light-grey p-5 md:p-6">
-          <div className="flex items-center gap-3 rounded-lg bg-white px-4 py-3 ring-1 ring-neutral-borders">
+          {/* Fixed height rather than padding: between scenes the query empties
+              out, and an empty line box would collapse the row and bounce
+              everything under it */}
+          <div className="flex h-11 items-center gap-3 rounded-lg bg-white px-4 ring-1 ring-neutral-borders">
             <svg
               width="16"
               height="16"
@@ -96,14 +199,42 @@ export default function DiscoverHighlight() {
                 strokeLinecap="round"
               />
             </svg>
-            <span className="text-sm text-neutral-dark-grey">frontend</span>
-            <span className="ml-auto h-4 w-px animate-pulse bg-primary-index" />
+            {/* The caret is grouped with the text instead of being another
+                gap-3 sibling, so it sits against the last letter */}
+            <span className="flex min-w-0 items-center">
+              <span className="truncate text-sm text-neutral-dark-grey">
+                {typed}
+              </span>
+              <span className="ml-px h-4 w-px shrink-0 animate-pulse bg-primary-index" />
+            </span>
           </div>
 
-          <ul className="mt-4 flex flex-col gap-3">
-            {sampleResults.map((result) => (
-              <li
-                key={result.username}
+          <div className="mt-4 flex h-5 items-center">
+            <motion.span
+              animate={{ opacity: showResults ? 1 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="text-xs text-neutral-grey"
+            >
+              {scene.results.length} people
+            </motion.span>
+          </div>
+
+          {/* Two rows always exist and only fade — mounting and unmounting them
+              per scene meant an exiting row could still be on screen while the
+              next query was already being typed */}
+          <ul className="mt-2 flex min-h-[196px] flex-col gap-3">
+            {scene.results.map((result, index) => (
+              <motion.li
+                key={index}
+                initial={false}
+                animate={{
+                  opacity: showResults ? 1 : 0,
+                  y: showResults || reduceMotion ? 0 : 10,
+                }}
+                transition={{
+                  duration: showResults ? 0.3 : 0.15,
+                  delay: showResults && !reduceMotion ? index * 0.1 : 0,
+                }}
                 className="flex items-center gap-4 rounded-lg bg-white p-4 ring-1 ring-neutral-borders"
               >
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-neutral-light-purple text-sm font-bold text-primary-index">
@@ -130,7 +261,7 @@ export default function DiscoverHighlight() {
                     </span>
                   ))}
                 </span>
-              </li>
+              </motion.li>
             ))}
           </ul>
         </div>
